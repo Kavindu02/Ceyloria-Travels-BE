@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRouter from "./routers/userRouter.js";
 import User from "./models/user.js";
+import packageRouter from "./routers/travelPackageRoutes.js";
+
 
 
 
@@ -81,6 +83,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/users", userRouter);
+app.use("/packages", packageRouter);
+
 
 
 app.listen(5000, () => {
