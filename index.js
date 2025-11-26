@@ -8,6 +8,7 @@ import userRouter from "./routers/userRouter.js";
 import User from "./models/user.js";
 import packageRouter from "./routers/travelPackageRoutes.js";
 import galleryRouter from "./routers/galleryRouter.js";
+import accommodationRouter from "./routers/accommodationRouter.js";
 
 
 
@@ -19,7 +20,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      // "https://www.microcctvsecuritysolutions.store", // frontend domain
+      
       "http://localhost:5173" // (optional) local dev frontend if you test locally
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -86,6 +87,8 @@ app.use(async (req, res, next) => {
 app.use("/users", userRouter);
 app.use("/packages", packageRouter);
 app.use("/gallery", galleryRouter);
+app.use("/accommodations", accommodationRouter);
+
 
 
 app.listen(5000, () => {
