@@ -9,6 +9,7 @@ import User from "./models/user.js";
 import packageRouter from "./routers/travelPackageRoutes.js";
 import galleryRouter from "./routers/galleryRouter.js";
 import accommodationRouter from "./routers/accommodationRouter.js";
+import contactRouter from "./routers/contactRouter.js";
 
 
 
@@ -88,7 +89,8 @@ app.use("/users", userRouter);
 app.use("/packages", packageRouter);
 app.use("/gallery", galleryRouter);
 app.use("/accommodations", accommodationRouter);
-
+app.use(express.json());
+app.use("/api", contactRouter);
 
 
 app.listen(5000, () => {

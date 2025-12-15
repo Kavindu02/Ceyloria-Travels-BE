@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 // import axios from "axios";
 // import nodemailer from "nodemailer";
 // import OTP from "../models/otp.js";
@@ -9,6 +10,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // helper: admin guard
 function ensureAdmin(req, res) {
