@@ -21,17 +21,16 @@ const app = express();
 app.use(
   cors({
     origin: [
-      
-      "http://localhost:5173" // (optional) local dev frontend if you test locally
+      "http://localhost:5173",
+      "https://sdk-travels-frontend.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    credentials: true
   })
 );
 
 // handle preflight (OPTIONS) requests
-app.use(cors());  
 app.use(bodyParser.json());
 
 const connectionString = process.env.MONGO_URL;
