@@ -17,6 +17,8 @@ function ensureAdmin(req, res) {
 export function createAccommodation(req, res) {
   if (!ensureAdmin(req, res)) return;
 
+  console.log("Creating accommodation with body:", req.body); // Debug log
+
   const accommodation = new Accommodation(req.body);
 
   accommodation

@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 
 const packageSchema = new mongoose.Schema({
-  name: {            // e.g., Standard, Deluxe
+  name: {
+    // e.g., Standard, Deluxe
     type: String,
     required: true,
   },
-  pricePerNight: {   // price for this package
+  pricePerNight: {
+    // price for this package
     type: Number,
     required: true,
   },
@@ -14,7 +16,7 @@ const packageSchema = new mongoose.Schema({
     default: "",
   },
   amenities: {
-    type: [String],  // e.g., wifi, breakfast, pool
+    type: [String], // e.g., wifi, breakfast, pool
     default: [],
   },
 });
@@ -27,6 +29,10 @@ const accommodationSchema = new mongoose.Schema(
     },
     location: {
       type: String,
+      required: true,
+    },
+    pricePerNight: {
+      type: Number,
       required: true,
     },
     type: {
