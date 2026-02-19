@@ -10,6 +10,7 @@ import packageRouter from "./routers/travelPackageRoutes.js";
 import galleryRouter from "./routers/galleryRouter.js";
 import accommodationRouter from "./routers/accommodationRouter.js";
 import contactRouter from "./routers/contactRouter.js";
+import blogRouter from "./routers/blogRouter.js";
 
 
 
@@ -31,8 +32,7 @@ app.use(
   })
 );
 
-// handle preflight (OPTIONS) requests
-app.use(bodyParser.json());
+app.use(express.json());
 
 const connectionString = process.env.MONGO_URL;
 
@@ -77,7 +77,6 @@ app.use(async (req, res, next) => {
     }
 
     req.user = decoded;
-    // console.log("Decoded token (ensured userId):", req.user);
     next();
   } catch (err) {
     console.error("JWT verification error:", err.message);
@@ -85,14 +84,17 @@ app.use(async (req, res, next) => {
   }
 });
 
+// Routes
 app.use("/users", userRouter);
 app.use("/packages", packageRouter);
 app.use("/gallery", galleryRouter);
 app.use("/accommodations", accommodationRouter);
-app.use(express.json());
+app.use("/blogs", blogRouter);
 app.use("/api", contactRouter);
 
 
-app.listen(5000, () => {
-  console.log("server started");
+const port = process.env.PORT || 5001;
+app.listen(port, () => {
+  console.log(`server started on port ${port}`);
 });
+
