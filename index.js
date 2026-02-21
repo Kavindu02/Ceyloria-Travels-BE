@@ -11,6 +11,7 @@ import galleryRouter from "./routers/galleryRouter.js";
 import accommodationRouter from "./routers/accommodationRouter.js";
 import contactRouter from "./routers/contactRouter.js";
 import blogRouter from "./routers/blogRouter.js";
+import destinationRouter from "./routers/destinationRouter.js";
 
 
 
@@ -90,6 +91,8 @@ app.use("/packages", packageRouter);
 app.use("/gallery", galleryRouter);
 app.use("/accommodations", accommodationRouter);
 app.use("/blogs", blogRouter);
+app.use("/blogs", blogRouter);
+app.use("/destinations", destinationRouter);
 app.use("/api", contactRouter);
 
 

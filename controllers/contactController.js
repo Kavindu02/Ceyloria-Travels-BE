@@ -105,3 +105,71 @@ ${message}
     return res.status(500).json({ message: "Failed to send contact message" });
   }
 };
+
+export const sendPlanTripMail = async (req, res) => {
+  const data = req.body;
+
+  try {
+    const textMessage = `
+New Trip Plan Request
+
+Destination: ${data.destination}
+Travel Dates: ${data.travelDates?.start || 'Not Set'} to ${data.travelDates?.end || 'Not Set'} (Flexible: ${data.travelDates?.flexible ? 'Yes' : 'No'})
+Travelers: ${data.travelers?.adults || 0} Adults, ${data.travelers?.children || 0} Children, ${data.travelers?.infants || 0} Infants
+
+Budget Range: ${data.budgetRange || 'Not Set'}
+Accommodation: ${data.accommodationType || 'Not Set'}
+Pace: ${data.travelPace || 'Not Set'}
+
+Interests: ${(data.interests || []).join(", ") || 'None'}
+Occasion: ${data.occasion || 'None'}
+Dietary Requirements: ${data.dietaryReqs || 'None'}
+Transport: ${data.transportPref || 'None'}
+Message/Notes: ${data.message || 'None'}
+
+Contact:
+Name: ${data.fullName}
+Email: ${data.email}
+Phone/WhatsApp: ${data.phone || 'None'}
+    `;
+
+    const htmlMessage = `
+      <h2>New Trip Plan Request</h2>
+      <hr />
+      <h3>Trip Details</h3>
+      <p><strong>Destination:</strong> ${data.destination}</p>
+      <p><strong>Dates:</strong> ${data.travelDates?.start || 'Not Set'} to ${data.travelDates?.end || 'Not Set'} <em>(Flexible: ${data.travelDates?.flexible ? 'Yes' : 'No'})</em></p>
+      <p><strong>Travelers:</strong> ${data.travelers?.adults || 0} Adults, ${data.travelers?.children || 0} Children, ${data.travelers?.infants || 0} Infants</p>
+
+      <h3>Preferences</h3>
+      <p><strong>Budget Range:</strong> ${data.budgetRange || 'Not Set'}</p>
+      <p><strong>Accommodation:</strong> ${data.accommodationType || 'Not Set'}</p>
+      <p><strong>Travel Pace:</strong> ${data.travelPace || 'Not Set'}</p>
+
+      <h3>Style & Extras</h3>
+      <p><strong>Interests:</strong> ${(data.interests || []).join(", ") || 'None'}</p>
+      <p><strong>Occasion:</strong> ${data.occasion || 'None'}</p>
+      <p><strong>Dietary Requirements:</strong> ${data.dietaryReqs || 'None'}</p>
+      <p><strong>Transport Preference:</strong> ${data.transportPref || 'None'}</p>
+      <p><strong>Message / Notes:</strong> ${data.message || 'None'}</p>
+
+      <h3>Contact Information</h3>
+      <p><strong>Name:</strong> ${data.fullName}</p>
+      <p><strong>Email:</strong> ${data.email}</p>
+      <p><strong>Phone/WhatsApp:</strong> ${data.phone || 'None'}</p>
+    `;
+
+    await transporter.sendMail({
+      from: `"Travel Website" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject: `New Trip Plan Request from ${data.fullName}`,
+      text: textMessage,
+      html: htmlMessage,
+    });
+
+    return res.json({ message: "Trip plan request sent successfully" });
+  } catch (error) {
+    console.error("Trip plan mail error:", error);
+    return res.status(500).json({ message: "Failed to send trip plan details" });
+  }
+};

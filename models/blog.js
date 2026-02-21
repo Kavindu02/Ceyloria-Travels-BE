@@ -18,6 +18,10 @@ const blogSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        images: {
+            type: [String],
+            default: [],
+        },
         author: {
             type: String,
             default: "Ceyloria Team",
