@@ -12,6 +12,7 @@ import accommodationRouter from "./routers/accommodationRouter.js";
 import contactRouter from "./routers/contactRouter.js";
 import blogRouter from "./routers/blogRouter.js";
 import destinationRouter from "./routers/destinationRouter.js";
+import activityRouter from "./routers/activityRouter.js";
 
 
 
@@ -93,6 +94,7 @@ app.use("/accommodations", accommodationRouter);
 app.use("/blogs", blogRouter);
 app.use("/blogs", blogRouter);
 app.use("/destinations", destinationRouter);
+app.use("/activities", activityRouter);
 app.use("/api", contactRouter);
 
 
