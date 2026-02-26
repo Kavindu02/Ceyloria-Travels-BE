@@ -16,6 +16,7 @@ function ensureAdmin(req, res) {
 //  CREATE PACKAGE (ADMIN ONLY) 
 export function createPackage(req, res) {
   if (!ensureAdmin(req, res)) return;
+  console.log("Create Package Body:", JSON.stringify(req.body, null, 2));
 
   const pkg = new TravelPackage(req.body);
 
@@ -25,6 +26,13 @@ export function createPackage(req, res) {
       res.json({ message: "Travel Package Created Successfully" });
     })
     .catch((error) => {
+      console.error("Create Package Error:", error);
+      if (error.name === "ValidationError") {
+        const messages = Object.values(error.errors).map(val => val.message);
+        return res.status(400).json({
+          message: "Validation Error: " + messages.join(", "),
+        });
+      }
       res.status(500).json({
         message: "Failed to create travel package",
         error: error.message,
@@ -39,6 +47,7 @@ export function getAllPackages(req, res) {
       res.json(packages);
     })
     .catch((error) => {
+      console.error("Get All Packages Error:", error);
       res.status(500).json({
         message: "Failed to fetch travel packages",
         error: error.message,
@@ -46,7 +55,7 @@ export function getAllPackages(req, res) {
     });
 }
 
-// controllers/travelPackageController.js
+//  GET SINGLE PACKAGE
 export function getPackage(req, res) {
   const id = req.params.id;
 
@@ -58,6 +67,7 @@ export function getPackage(req, res) {
       res.json(pkg);
     })
     .catch((error) => {
+      console.error("Get Package Error:", error);
       res.status(500).json({
         message: "Failed to fetch package",
         error: error.message,
@@ -83,6 +93,7 @@ export function updatePackage(req, res) {
       });
     })
     .catch((error) => {
+      console.error("Update Package Error:", error);
       res.status(500).json({
         message: "Failed to update package",
         error: error.message,
@@ -104,9 +115,55 @@ export function deletePackage(req, res) {
       res.json({ message: "Package Deleted Successfully" });
     })
     .catch((error) => {
+      console.error("Delete Package Error:", error);
       res.status(500).json({
         message: "Failed to delete package",
         error: error.message,
       });
     });
+}
+
+// GET CURATED PACKAGES
+export function getCuratedPackages(req, res) {
+  TravelPackage.find({ isCurated: true })
+    .then((packages) => {
+      res.json(packages);
+    })
+    .catch((error) => {
+      console.error("Get Curated Packages Error:", error);
+      res.status(500).json({
+        message: "Failed to fetch curated packages",
+        error: error.message,
+      });
+    });
+}
+
+// UPDATE CURATED PACKAGES (Set which packages are curated)
+export async function updateCuratedPackages(req, res) {
+  if (!ensureAdmin(req, res)) return;
+
+  const { packageIds } = req.body; // Expecting an array of exactly 3 IDs
+
+  if (!Array.isArray(packageIds) || packageIds.length > 3) {
+    return res.status(400).json({ message: "Please provide up to 3 package IDs" });
+  }
+
+  try {
+    // Reset all curated flags
+    await TravelPackage.updateMany({}, { isCurated: false });
+
+    // Set curated flags for selected IDs
+    await TravelPackage.updateMany(
+      { _id: { $in: packageIds } },
+      { isCurated: true }
+    );
+
+    res.json({ message: "Curated packages updated successfully" });
+  } catch (error) {
+    console.error("Update Curated Packages Error:", error);
+    res.status(500).json({
+      message: "Failed to update curated packages",
+      error: error.message,
+    });
+  }
 }

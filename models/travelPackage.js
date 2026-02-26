@@ -5,60 +5,78 @@ const travelPackageSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      default: "Untitled Package",
     },
 
     shortDescription: {
       type: String,
-      required: true,
+      default: "",
     },
 
     description: {
       type: String,
-      required: true,
+      default: "",
     },
 
     images: {
       type: [String],
-      required: true,
+      default: [],
     },
 
     price: {
       type: Number,
-      required: true,
+      default: 0,
+    },
+
+    ratingText: {
+      type: String,
+      default: "4.9/5",
+    },
+
+    starCount: {
+      type: Number,
+      default: 5,
     },
 
     duration: {
-      type: String, // e.g. "5 Days / 4 Nights"
-      required: true,
+      type: String,
+      default: "",
     },
 
     citiesCovered: {
       type: [String],
-      required: true,
+      default: [],
     },
 
     highlights: {
       type: [String],
-      required: true,
+      default: [],
     },
 
-    itinerary: [
-      {
-        day: Number,
-        title: String,
-        description: String,
-      },
-    ],
+    itinerary: {
+      type: [
+        {
+          day: Number,
+          title: String,
+          description: String,
+        },
+      ],
+      default: [],
+    },
 
     inclusions: {
       type: [String],
-      required: true,
+      default: [],
     },
 
     exclusions: {
       type: [String],
       default: [],
+    },
+
+    isCurated: {
+      type: Boolean,
+      default: false,
     },
   },
   {
